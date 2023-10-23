@@ -32,8 +32,12 @@ log.level = "info";
 // export { ErrorResponse, errorHandler };
 
 
+// export const ErrorResponse = (err: Error, req: Request, res: Response, next: NextFunction) => {
+//   log.error(err);
+//   res.status(500).send({ errors: [{ message: "Something went wrong" }] });
+// };
 
-export const ErrorResponse = (err: Error, req: Request, res: Response, next: NextFunction) => {
-  log.error(err);
+export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err);
   res.status(500).send({ errors: [{ message: "Something went wrong" }] });
 };

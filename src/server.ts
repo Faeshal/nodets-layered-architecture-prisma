@@ -14,8 +14,9 @@ import helmet from "helmet";
 import log4js from "log4js";
 import paginate from "express-paginate";
 import dayjs from "dayjs";
-// import { errorHandler } from ("./middleware/errorHandler");
+import { errorHandler } from "./middleware/errorHandler";
 // import db from ("./models");
+import route from "./routes/index"
 const app: any = express();
 const PORT: any = process.env.PORT || 3000;
 const log = log4js.getLogger("entrypoint");
@@ -61,10 +62,11 @@ app.set("trust proxy", 1);
 app.use(paginate.middleware(10, 30));
 
 // * Route
-app.use(require("./routes"));
+
+app.use(route);
 
 // * Custom Error Handler
-// app.use(errorHandler);
+app.use(errorHandler);
 
 // * Rolliing log (optional)
 
@@ -74,7 +76,6 @@ app.listen(PORT, (err: any) => {
     log.error(`Error : ${err}`);
     process.exit(1);
   }
-  log.warn(process.env.DB_NAME);
   log.info(`Server is Running On Port : ${PORT}`);
 });
 
