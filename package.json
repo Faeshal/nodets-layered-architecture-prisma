@@ -8,7 +8,9 @@
     "build": "tsc",
     "watch-ts": "tsc -w",
     "dev": "nodemon src/server.ts",
-    "start": "nodemon dist/server.js"
+    "start": "nodemon dist/server.js",
+    "dbpush": "cd src && npx prisma db push",
+    "migrate": "cd src && npx prisma migrate dev"
   },
   "keywords": [],
   "author": "",
