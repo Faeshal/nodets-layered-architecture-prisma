@@ -25,14 +25,14 @@ export const getIncomes = asyncHandler(async (req, res, next) => {
 // @access  public
 export const addIncomes = asyncHandler(async (req, res, next) => {
   log.info("body:", req.body);
-  // * Validator
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   return next(
-  //     new ErrorResponse(errors.array({ onlyFirstError: true })[0].msg, 400)
-  //   );
-  // }
-  await incomeService.add(req.body);
+  const { name, value, userId, categories } = req.body
+  let fmtIncome = {
+    name, value, userId, categories: {
+      create: categories
+    },
+  }
+  log.info("fmtIncome", fmtIncome)
+  await incomeService.add(fmtIncome);
   res.status(201).json({ success: true, message: "income create" });
 });
 

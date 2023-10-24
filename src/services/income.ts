@@ -4,19 +4,19 @@ log.level = "debug";
 
 export const add = async (body: any) => {
   log.info("body:", body);
-  const data = await incomeRepo.add(body);
+  const data = await incomeRepo.create(body);
   return data;
 };
 
 export const getAll = async (body: any) => {
   log.info("body:", body);
-  let data = await incomeRepo.getAll(body);
+  let data = await incomeRepo.findAll(body);
   return data;
 };
 
 export const getById = async (id: number) => {
   log.info("id:", id);
-  const data = await incomeRepo.getById(id);
+  const data = await incomeRepo.findById(id);
   return data;
 };
 

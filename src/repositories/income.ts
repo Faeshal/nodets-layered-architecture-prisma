@@ -5,12 +5,12 @@ import log4js from "log4js";
 const log = log4js.getLogger("repository:income");
 log.level = "info";
 
-export const add = async (body: any) => {
+export const create = async (body: any) => {
   const data = await prisma.income.create({ data: body });
-  return data;
+  return data
 };
 
-export const getAll = async (body: any) => {
+export const findAll = async (body: any) => {
   const { offset, req, orderBy } = body;
 
   const totalData = await prisma.income.count();
@@ -18,6 +18,18 @@ export const getAll = async (body: any) => {
     skip: offset,
     take: req.query.limit,
     orderBy,
+    include: {
+      user: {
+        select: {
+          email: true,
+        },
+      },
+      categories: {
+        select: {
+          tag: true
+        }
+      }
+    },
   });
 
   const pagin = await paginate({
@@ -31,7 +43,7 @@ export const getAll = async (body: any) => {
   return result;
 };
 
-export const getById = async (id: number) => {
+export const findById = async (id: number) => {
   const data = await prisma.income.findUnique({ where: { id } });
   return data;
 };

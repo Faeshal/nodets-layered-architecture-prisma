@@ -13,7 +13,7 @@ datasource db {
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   incomes   Income[]
@@ -25,7 +25,7 @@ model Income {
   value      Decimal    @db.Decimal(9, 2)
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
-  User       User?      @relation(fields: [userId], references: [id])
+  user       User?      @relation(fields: [userId], references: [id])
   userId     Int?
   categories Category[]
 }
