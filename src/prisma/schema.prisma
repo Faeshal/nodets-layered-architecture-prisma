@@ -10,10 +10,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Income {
+model User {
   id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(255)
-  value     Int
+  email     String   @unique
+  name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  incomes   Income[]
+}
+
+model Income {
+  id         Int        @id @default(autoincrement())
+  name       String     @db.VarChar(255)
+  value      Decimal    @db.Decimal(9, 2)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  User       User?      @relation(fields: [userId], references: [id])
+  userId     Int?
+  categories Category[]
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  tag       String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  incomes   Income[]
 }

@@ -41,13 +41,6 @@ export const addIncomes = asyncHandler(async (req, res, next) => {
 // @access  public
 export const getIncome = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  // *Express Validator
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   return next(
-  //     new ErrorResponse(errors.array({ onlyFirstError: true })[0].msg, 400)
-  //   );
-  // }
   const data = await incomeService.getById(parseInt(id));
   res.status(200).json({ success: true, data: data || {} });
 });
@@ -58,14 +51,6 @@ export const getIncome = asyncHandler(async (req, res, next) => {
 export const updateIncome = asyncHandler(async (req, res, next) => {
   log.info("body:", req.body);
   const { id } = req.params;
-
-  // *Express Validator
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   return next(
-  //     new ErrorResponse(errors.array({ onlyFirstError: true })[0].msg, 400)
-  //   );
-  // }
 
   // * check valid id
   const isValid = await incomeService.getById(parseInt(id));
@@ -84,20 +69,11 @@ export const updateIncome = asyncHandler(async (req, res, next) => {
 // @access  public
 export const deleteIncome = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  // *Express Validator
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   return next(
-  //     new ErrorResponse(errors.array({ onlyFirstError: true })[0].msg, 400)
-  //   );
-  // }
 
   // * check valid id
   const isValid = await incomeService.getById(parseInt(id));
   log.info("isvalid", isValid);
-  // if (!isValid) {
-  //   return next(new ErrorResponse("invalid id", 400));
-  // }
+  if (!isValid) return
 
   // * call delete service
   await incomeService.destroy(parseInt(id));

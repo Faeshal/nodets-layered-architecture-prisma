@@ -1,6 +1,6 @@
 "use strict";
 import "dotenv/config";
-import "pretty-error";
+// import "pretty-error";
 import express, { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import cors from "cors";
@@ -16,11 +16,17 @@ import paginate from "express-paginate";
 import dayjs from "dayjs";
 import { errorHandler } from "./middleware/errorHandler";
 // import db from ("./models");
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 import route from "./routes/index"
 const app: any = express();
 const PORT: any = process.env.PORT || 3000;
 const log = log4js.getLogger("entrypoint");
 log.level = "info";
+
+import PrettyError from "pretty-error"
+var pe = new PrettyError();
+pe.start();
 
 // * Security, Compression & Parser
 app.use(helmet());
@@ -70,13 +76,24 @@ app.use(errorHandler);
 
 // * Rolliing log (optional)
 
+
+// * DB
+const dbConn = async () => {
+  await prisma.$connect().catch(err => {
+    log.error("DB ERROR", err)
+    process.exit(1);
+  })
+  log.info("✅ DB Connected..")
+}
+dbConn()
+
 // * Server Listen
 app.listen(PORT, (err: any) => {
   if (err) {
     log.error(`Error : ${err}`);
     process.exit(1);
   }
-  log.info(`Server is Running On Port : ${PORT}`);
+  log.info(`✅ Server is Running On Port: ${PORT}`);
 });
 
 export default app;

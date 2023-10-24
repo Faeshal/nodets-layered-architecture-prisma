@@ -12,15 +12,14 @@ export const add = async (body: any) => {
 
 export const getAll = async (body: any) => {
   const { offset, req, orderBy } = body;
+
   const totalData = await prisma.income.count();
   const data = await prisma.income.findMany({
     skip: offset,
     take: req.query.limit,
     orderBy,
   });
-  log.info("data 🚀:", data);
 
-  // * pagination
   const pagin = await paginate({
     length: totalData,
     limit: req.query.limit,
@@ -28,6 +27,7 @@ export const getAll = async (body: any) => {
     req,
   });
   let result = { pagin, totalData, data };
+
   return result;
 };
 
