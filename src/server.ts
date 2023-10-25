@@ -1,13 +1,12 @@
 "use strict";
 import "dotenv/config";
-// import "pretty-error";
+import PrettyError from "pretty-error"
 import express, { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import cors from "cors";
-// const session = require("express-session");
-import session from "express-session";
-// const SequelizeStore = require("connect-session-sequelize")(session.Store);
-// import SequelizeStore from "connect-session-sequelize" (session.Store)
+import expressSession from 'express-session';
+import { PrismaSessionStore } from '@quixo3/prisma-session-store';
+import { PrismaClient } from '@prisma/client';
 import compression from "compression";
 import hpp from "hpp";
 import helmet from "helmet";
@@ -15,20 +14,16 @@ import log4js from "log4js";
 import paginate from "express-paginate";
 import dayjs from "dayjs";
 import { errorHandler } from "./middleware/errorHandler";
-// import db from ("./models");
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
 import route from "./routes/index"
-const app: any = express();
 const PORT: any = process.env.PORT || 3000;
+const prisma = new PrismaClient()
+const pe = new PrettyError();
+const app: any = express();
 const log = log4js.getLogger("entrypoint");
 log.level = "info";
 
-import PrettyError from "pretty-error"
-var pe = new PrettyError();
-pe.start();
-
 // * Security, Compression & Parser
+pe.start();
 app.use(helmet());
 app.use(hpp());
 app.use(cors());
@@ -51,18 +46,22 @@ app.use(morgan("morgan: [:time] :method :url - :status"));
 
 // * Session Store
 app.set("trust proxy", 1);
-// app.use(
-//   session({
-//     secret: process.env.COOKIE_SECRET,
-//     store: new SequelizeStore({
-//       db: db.sequelize,
-//       expiration: 384 * 60 * 60 * 1000, // 16 days in milisecond
-//     }),
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: { maxAge: 14 * 24 * 60 * 60 * 1000 }, // 14 days
-//   })
-// );
+app.use(
+  expressSession({
+    cookie: { maxAge: 14 * 24 * 60 * 60 * 1000 }, // 14 days
+    secret: 'xx17289',
+    resave: false,
+    saveUninitialized: false,
+    store: new PrismaSessionStore(
+      new PrismaClient(),
+      {
+        checkPeriod: 2 * 60 * 1000,  //ms
+        dbRecordIdIsSessionId: true,
+        dbRecordIdFunction: undefined,
+      }
+    )
+  })
+);
 
 // * Paginate
 app.use(paginate.middleware(10, 30));

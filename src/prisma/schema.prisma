@@ -37,3 +37,10 @@ model Category {
   updatedAt DateTime @updatedAt
   incomes   Income[]
 }
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
