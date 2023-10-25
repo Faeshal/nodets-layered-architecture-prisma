@@ -1,7 +1,6 @@
 import asyncHandler from "express-async-handler";
 import * as incomeService from "../services/income"
-// const { ErrorResponse } = require("../middleware/errorHandler");
-// import { Error } from "../middleware/errorHandler";
+import { ErrorResponse } from "../middleware/errorHandler";
 import { validationResult } from "express-validator";
 import log4js from "log4js";
 const log = log4js.getLogger("controllers:income");
@@ -29,11 +28,9 @@ export const addIncomes = asyncHandler(async (req, res, next) => {
 
 
   // * error handler
-  // if (value !== 22) {
-  //   return next(
-  //     new Error(`value must be integer`)
-  //   );
-  // }
+  if (value !== 22) {
+    return next(new ErrorResponse("invalid id", 400,));
+  }
 
   let fmtIncome = {
     name, value, userId, categories: {

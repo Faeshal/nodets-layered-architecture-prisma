@@ -11,6 +11,7 @@
     /* Source Map Options */
     "sourceRoot": "./src",
     "inlineSourceMap": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "typeRoots": ["./src/types/express/index.d.ts"]
   }
 }
