@@ -75,7 +75,6 @@ app.use(errorHandler);
 
 // * Rolliing log (optional)
 
-
 // * DB
 const dbConn = async () => {
   await prisma.$connect().catch(err => {

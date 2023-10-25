@@ -26,7 +26,6 @@ export const addIncomes = asyncHandler(async (req, res, next) => {
   log.info("body:", req.body);
   const { name, value, userId, categories } = req.body
 
-
   // * error handler
   if (value !== 22) {
     return next(new ErrorResponse("invalid id", 400,));
