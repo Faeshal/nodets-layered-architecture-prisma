@@ -30,3 +30,10 @@ export const findAll = async (body: any) => {
 
     return result;
 };
+
+export const findOne = async (filter: any) => {
+    const data = await prisma.user.findUnique({
+        where: filter
+    })
+    return data;
+};

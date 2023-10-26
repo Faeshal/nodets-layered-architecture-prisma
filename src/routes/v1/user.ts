@@ -1,16 +1,8 @@
 import express from "express"
 import * as userController from "../../controllers/user"
-import { body } from "express-validator"
 const router = express.Router()
+import { protect, authorize } from "../../middleware/auth";
 
-router.get("/users", userController.getUsers);
-router.post(
-    "/users",
-    [
-        body("email", "email is required").isEmail(),
-    ],
-    userController.addUser
-);
-
+router.get("/users", protect, userController.getUsers);
 
 export default router

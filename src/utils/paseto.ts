@@ -1,17 +1,17 @@
-const { V3 } = require("paseto");
-const log = require("log4js").getLogger("utils:paseto");
+import "dotenv/config";
+import { V3 } from "paseto"
+import log4js from "log4js";
+const log = log4js.getLogger("utils:paseto");
 log.level = "info";
+
+const PASETO_SECRET: any = process.env.PASETO_SECRET_KEY
 
 const generateToken = async (payload: any) => {
     try {
         log.info("payload", payload);
 
-        // generate secret key
-        // const genSecret = await V3.generateKey("local", { format: "paserk" });
-        // log.warn("secret key :", genSecret);
-
         // local paseto strategy
-        const token = await V3.encrypt(payload, process.env.PASETO_SECRET_KEY, {
+        const token = await V3.encrypt(payload, PASETO_SECRET, {
             expiresIn: "24h",
         });
 
@@ -33,7 +33,7 @@ const generateToken = async (payload: any) => {
 
 const verifyToken = async (token: string) => {
     try {
-        const decoded = await V3.decrypt(token, process.env.PASETO_SECRET_KEY);
+        const decoded = await V3.decrypt(token, PASETO_SECRET);
         log.warn("decoded:", decoded);
         return {
             success: true,

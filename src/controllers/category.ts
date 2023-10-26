@@ -4,6 +4,7 @@ import log4js from "log4js";
 const log = log4js.getLogger("controllers:category");
 log.level = "info";
 
+
 // * @route GET /api/v1/categories
 // @desc    get categories
 // @access  public

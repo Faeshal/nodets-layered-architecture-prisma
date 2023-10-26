@@ -67,8 +67,8 @@ app.use(
 app.use(paginate.middleware(10, 30));
 
 // * Route
-
 app.use(route);
+
 
 // * Custom Error Handler
 app.use(errorHandler);
