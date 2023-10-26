@@ -26,9 +26,12 @@ export const addIncomes = asyncHandler(async (req, res, next) => {
   log.info("body:", req.body);
   const { name, value, userId, categories } = req.body
 
-  // * error handler
-  if (value !== 22) {
-    return next(new ErrorResponse("invalid id", 400,));
+  // *Express Validator
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new ErrorResponse(errors.array({ onlyFirstError: true })[0].msg, 400)
+    );
   }
 
   let fmtIncome = {
@@ -46,6 +49,13 @@ export const addIncomes = asyncHandler(async (req, res, next) => {
 // @access  public
 export const getIncome = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
+  // *Express Validator
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new ErrorResponse(errors.array({ onlyFirstError: true })[0].msg, 400)
+    );
+  }
   const data = await incomeService.getById(parseInt(id));
   res.status(200).json({ success: true, data: data || {} });
 });
@@ -57,11 +67,21 @@ export const updateIncome = asyncHandler(async (req, res, next) => {
   log.info("body:", req.body);
   const { id } = req.params;
 
+  // *Express Validator
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new ErrorResponse(errors.array({ onlyFirstError: true })[0].msg, 400)
+    );
+  }
+
   // * check valid id
   const isValid = await incomeService.getById(parseInt(id));
-  // if (!isValid) {
-  //   return next(new ErrorResponse("invalid id", 400));
-  // }
+  if (!isValid) {
+    return next(
+      new ErrorResponse("invalid id", 400)
+    );
+  }
 
   // * call update service
   await incomeService.update(req.body, parseInt(id));
@@ -77,8 +97,12 @@ export const deleteIncome = asyncHandler(async (req, res, next) => {
 
   // * check valid id
   const isValid = await incomeService.getById(parseInt(id));
-  log.info("isvalid", isValid);
-  if (!isValid) return
+  if (!isValid) {
+    return next(
+      new ErrorResponse("invalid id", 400)
+    );
+  }
+
 
   // * call delete service
   await incomeService.destroy(parseInt(id));

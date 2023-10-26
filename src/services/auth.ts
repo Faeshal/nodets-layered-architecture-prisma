@@ -74,5 +74,3 @@ export const login = async (email: string, password: string) => {
     };
     return { success: true, statusCode: 200, message: "ok", data: fmtData };
 };
-
-

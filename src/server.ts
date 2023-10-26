@@ -4,8 +4,6 @@ import PrettyError from "pretty-error"
 import express, { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import cors from "cors";
-import expressSession from 'express-session';
-import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import { PrismaClient } from '@prisma/client';
 import compression from "compression";
 import hpp from "hpp";
@@ -44,31 +42,11 @@ morgan.token("time", (req: Request) => {
 });
 app.use(morgan("morgan: [:time] :method :url - :status"));
 
-// * Session Store
-app.set("trust proxy", 1);
-app.use(
-  expressSession({
-    cookie: { maxAge: 14 * 24 * 60 * 60 * 1000 }, // 14 days
-    secret: 'xx17289',
-    resave: false,
-    saveUninitialized: false,
-    store: new PrismaSessionStore(
-      new PrismaClient(),
-      {
-        checkPeriod: 2 * 60 * 1000,  //ms
-        dbRecordIdIsSessionId: true,
-        dbRecordIdFunction: undefined,
-      }
-    )
-  })
-);
-
 // * Paginate
 app.use(paginate.middleware(10, 30));
 
 // * Route
 app.use(route);
-
 
 // * Custom Error Handler
 app.use(errorHandler);

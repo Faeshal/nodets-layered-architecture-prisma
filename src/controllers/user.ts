@@ -6,7 +6,7 @@ log.level = "info";
 
 // * @route GET /api/v1/users
 // @desc    get users
-// @access  public
+// @access  private
 export const getUsers = asyncHandler(async (req, res, next) => {
     const data = await userService.getAll({
         limit: req.query.limit,
@@ -14,5 +14,6 @@ export const getUsers = asyncHandler(async (req, res, next) => {
         order: [["createdAt", "DESC"]],
         req,
     });
+    log.warn("DATA", data)
     res.status(200).json(data)
 });

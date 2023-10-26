@@ -1,6 +1,7 @@
 import express from "express"
-const router = express.Router()
 import v1Route from "../routes/v1"
+const router = express.Router()
+
 
 router.use("/api/v1", v1Route);
 

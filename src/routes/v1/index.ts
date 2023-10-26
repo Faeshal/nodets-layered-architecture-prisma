@@ -10,4 +10,4 @@ router.use("/", incomeRoute);
 router.use("/", userRoute);
 router.use("/", categoryRoute);
 
-export default router;
+export default router 

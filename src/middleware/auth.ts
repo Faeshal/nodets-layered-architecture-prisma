@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-const { ErrorResponse } = require("../middleware/errorHandler");
+import { ErrorResponse } from "./errorHandler";
 import { verifyToken } from "../utils/paseto";
 import log4js from "log4js";
 const log = log4js.getLogger("middleware:auth");
 log.level = "info";
 
-export const protect = async (req: Request, res: Response, next: NextFunction) => {
+export const protect = async (req: Request, res: Response, next: any) => {
     try {
         let token;
         if (
@@ -24,6 +24,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
             return next(new ErrorResponse("unauthorized or expired token", 401));
         }
         req.user = decoded.data;
+        log.info("req.user", req.user)
         next();
     } catch (err) {
         log.error(err);
