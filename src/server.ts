@@ -32,11 +32,9 @@ app.use(express.urlencoded({ extended: true }));
 // * Http Logger
 morgan.token("time", (req: Request) => {
   let user = "anonym";
-  // if (req.session) {
-  //   if (req.session) {
-  //     user = req.session.name || "anonym";
-  //   }
-  // }
+  if (req.user) {
+    user = req.user.username || "anonym";
+  }
   const time = dayjs().format("h:mm:ss A") + " - " + user;
   return time;
 });

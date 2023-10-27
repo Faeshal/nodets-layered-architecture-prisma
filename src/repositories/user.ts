@@ -10,24 +10,14 @@ export const create = async (body: any) => {
     return data;
 };
 
-export const findAll = async (body: any) => {
-    const { offset, req, orderBy } = body;
-
+export const findAll = async (limit: number, offset: number, filter: any) => {
     const totalData = await prisma.user.count();
     const data = await prisma.user.findMany({
         skip: offset,
-        take: req.query.limit,
-        orderBy,
+        take: limit,
+        where: filter
     });
-
-    const pagin = await paginate({
-        length: totalData,
-        limit: req.query.limit,
-        page: req.query.page,
-        req,
-    });
-    let result = { pagin, totalData, data };
-
+    const result = { totalData, data };
     return result;
 };
 
