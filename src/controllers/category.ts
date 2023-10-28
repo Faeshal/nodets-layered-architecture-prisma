@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import * as categoryService from "../services/category"
 import { validationResult } from "express-validator";
 import { ErrorResponse } from "../middleware/errorHandler";
+import { paginate } from "../utils/paginate";
 import log4js from "log4js";
 const log = log4js.getLogger("controllers:category");
 log.level = "info";
@@ -11,13 +12,34 @@ log.level = "info";
 // @desc    get categories
 // @access  public
 export const getCategories = asyncHandler(async (req, res, next) => {
+    const { name } = req.query
+    let filter: any = {}
+    if (name) {
+        filter.name = name
+    }
+
     const data = await categoryService.getAll({
         limit: req.query.limit,
         offset: req.skip,
-        order: [["createdAt", "DESC"]],
+        filter
+    });
+
+    // * pagination
+    const pagin = await paginate({
+        length: data.totalData,
+        limit: req.query.limit,
+        page: req.query.page,
         req,
     });
-    res.status(200).json(data)
+
+    res.status(200).json({
+        success: true,
+        totalData: data.totalData,
+        totalPage: pagin?.totalPage,
+        currentPage: pagin?.currentPage,
+        nextPage: pagin?.nextPage,
+        data: data.data || [],
+    });
 });
 
 // * @route POST /api/v1/categories

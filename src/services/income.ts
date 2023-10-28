@@ -10,7 +10,8 @@ export const add = async (body: any) => {
 
 export const getAll = async (body: any) => {
   log.info("body:", body);
-  let data = await incomeRepo.findAll(body);
+  const { limit, offset, filter } = body
+  let data = await incomeRepo.findAll(limit, offset, filter);
   return data;
 };
 
