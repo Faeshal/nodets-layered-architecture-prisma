@@ -50,6 +50,37 @@ app.use(route);
 app.use(errorHandler);
 
 // * Rolliing log (optional)
+let layoutConfig = {
+  type: "pattern",
+  pattern: "%x{id}: [%x{info}] %p %c - %[%m%]",
+  tokens: {
+    id: () => {
+      return Date.now();
+    },
+    info: (req: Request) => {
+      const info = dayjs().format("D/M/YYYY h:mm:ss A");
+      return info;
+    },
+  },
+};
+log4js.configure({
+  appenders: {
+    express: {
+      type: "dateFile",
+      filename: "./logs/express.log",
+      numBackups: 7,
+      layout: layoutConfig,
+      maxLogSize: 7000000, // byte == 7mb
+    },
+    console: {
+      type: "console",
+      layout: layoutConfig,
+    },
+  },
+  categories: {
+    default: { appenders: ["express", "console"], level: "debug" },
+  },
+});
 
 // * DB
 const dbConn = async () => {

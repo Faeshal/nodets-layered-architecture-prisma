@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
-import { paginate } from "../utils/paginate";
 import log4js from "log4js";
 const log = log4js.getLogger("repository:user");
 log.level = "info";

@@ -1,8 +1,10 @@
 import * as userRepo from "../repositories/user"
-const log = require("log4js").getLogger("service:user");
+import log4js from "log4js";
+const log = log4js.getLogger("service:user");
 log.level = "debug";
 
-export const getAll = async (body: any) => {
+export const getUsers = async (body: any) => {
+    log.info("body", body)
     const { limit, offset, filter } = body
     let data = await userRepo.findAll(limit, offset, filter);
     return data;

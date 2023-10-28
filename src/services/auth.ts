@@ -2,10 +2,11 @@ import "dotenv/config";
 import * as userRepo from "../repositories/user"
 import { generateToken } from "../utils/paseto"
 import bcrypt from "bcrypt";
-const log = require("log4js").getLogger("service:auth");
+import log4js from "log4js";
+const log = log4js.getLogger("service:auth");
 log.level = "debug";
 
-export const register = async (body: any) => {
+export const register = async (body: { username: string, email: string, password: string, role: string }) => {
     log.info("body:", body);
     const { username, email, password, role } = body;
 
@@ -37,7 +38,9 @@ export const register = async (body: any) => {
     };
 };
 
-export const login = async (email: string, password: string) => {
+export const login = async (body: { email: string, password: string }) => {
+    log.info("body:", body);
+    const { email, password } = body
 
     // * check is email exist ?
     const user = await userRepo.findOne({ email });

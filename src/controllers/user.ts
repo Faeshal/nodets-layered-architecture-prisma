@@ -15,7 +15,7 @@ export const getUsers = asyncHandler(async (req, res, next) => {
         filter.role = role
     }
 
-    const data = await userService.getAll({
+    const data = await userService.getUsers({
         limit: req.query.limit,
         offset: req.skip,
         filter

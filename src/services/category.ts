@@ -1,14 +1,15 @@
 import * as categoryRepo from "../repositories/category"
-const log = require("log4js").getLogger("service:category");
+import log4js from "log4js";
+const log = log4js.getLogger("service:category");
 log.level = "debug";
 
-export const add = async (body: any) => {
+export const addCategory = async (body: any) => {
     log.info("body:", body);
     const data = await categoryRepo.create(body);
     return data;
 };
 
-export const getAll = async (body: any) => {
+export const getCategories = async (body: any) => {
     log.info("body:", body);
     const { limit, offset, filter } = body
     let data = await categoryRepo.findAll(limit, offset, filter);

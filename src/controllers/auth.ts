@@ -12,7 +12,7 @@ log.level = "info";
 // @access    Public 
 export const register = asyncHandler(async (req, res, next) => {
     var { username, email, password, role } = req.body;
-    log.info("body register:", req.body);
+    log.info("body:", req.body);
 
     // *Express Validator
     const errors = validationResult(req);
@@ -34,6 +34,7 @@ export const register = asyncHandler(async (req, res, next) => {
 // @access  public
 export const login = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
+    log.info("body:", req.body);
 
     // *Express Validator
     const errors = validationResult(req);
@@ -44,7 +45,7 @@ export const login = asyncHandler(async (req, res, next) => {
     }
 
     // * call service
-    const result = await authService.login(email, password)
+    const result = await authService.login({ email, password })
     if (result.success == false) {
         return next(new ErrorResponse(result.message, result.statusCode || 500));
     }

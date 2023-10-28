@@ -20,6 +20,7 @@ const errorHandler = (err: ErrorResponse, req: Request, res: Response, next: Nex
   res.status(err.statusCode || 500).json({
     success: false,
     message: err.message || "Server Error",
+    data: null
   });
 };
 

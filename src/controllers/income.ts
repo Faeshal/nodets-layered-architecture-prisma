@@ -17,7 +17,7 @@ export const getIncomes = asyncHandler(async (req, res, next) => {
     filter.name = name
   }
 
-  const data = await incomeService.getAll({
+  const data = await incomeService.getIncomes({
     limit: req.query.limit,
     offset: req.skip,
     filter
@@ -62,8 +62,10 @@ export const addIncomes = asyncHandler(async (req, res, next) => {
     },
   }
   log.info("fmtIncome", fmtIncome)
-  await incomeService.add(fmtIncome);
-  res.status(201).json({ success: true, message: "income create" });
+
+  const data = await incomeService.addIncome(fmtIncome);
+
+  res.status(201).json({ success: true, message: "created", data });
 });
 
 // * @route GET /api/v1/incomes/:id
@@ -78,7 +80,7 @@ export const getIncome = asyncHandler(async (req, res, next) => {
       new ErrorResponse(errors.array({ onlyFirstError: true })[0].msg, 400)
     );
   }
-  const data = await incomeService.getById(parseInt(id));
+  const data = await incomeService.getIncome(parseInt(id));
   res.status(200).json({ success: true, data: data || {} });
 });
 
@@ -98,7 +100,7 @@ export const updateIncome = asyncHandler(async (req, res, next) => {
   }
 
   // * check valid id
-  const isValid = await incomeService.getById(parseInt(id));
+  const isValid = await incomeService.getIncome(parseInt(id));
   if (!isValid) {
     return next(
       new ErrorResponse("invalid id", 400)
@@ -106,7 +108,7 @@ export const updateIncome = asyncHandler(async (req, res, next) => {
   }
 
   // * call update service
-  await incomeService.update(req.body, parseInt(id));
+  await incomeService.update(parseInt(id), req.body);
 
   res.status(200).json({ success: true, message: "update success" });
 });
@@ -118,16 +120,15 @@ export const deleteIncome = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   // * check valid id
-  const isValid = await incomeService.getById(parseInt(id));
+  const isValid = await incomeService.getIncome(parseInt(id));
   if (!isValid) {
     return next(
       new ErrorResponse("invalid id", 400)
     );
   }
 
-
   // * call delete service
   await incomeService.destroy(parseInt(id));
 
-  res.status(200).json({ success: true, message: "delete success" });
+  res.status(200).json({ success: true, message: "deleted" });
 });

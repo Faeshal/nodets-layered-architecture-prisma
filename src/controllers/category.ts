@@ -18,7 +18,7 @@ export const getCategories = asyncHandler(async (req, res, next) => {
         filter.name = name
     }
 
-    const data = await categoryService.getAll({
+    const data = await categoryService.getCategories({
         limit: req.query.limit,
         offset: req.skip,
         filter
@@ -47,13 +47,17 @@ export const getCategories = asyncHandler(async (req, res, next) => {
 // @access  public
 export const addCategory = asyncHandler(async (req, res, next) => {
     log.info("body:", req.body);
+
     // *Express Validator
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return next(
             new ErrorResponse(errors.array({ onlyFirstError: true })[0].msg, 400)
         );
+
     }
-    await categoryService.add(req.body);
+
+    await categoryService.addCategory(req.body);
+
     res.status(201).json({ success: true, message: "category create" });
 });

@@ -1,29 +1,30 @@
 import * as incomeRepo from "../repositories/income"
-const log = require("log4js").getLogger("service:income");
+import log4js from "log4js";
+const log = log4js.getLogger("service:income");
 log.level = "debug";
 
-export const add = async (body: any) => {
+export const addIncome = async (body: any) => {
   log.info("body:", body);
   const data = await incomeRepo.create(body);
   return data;
 };
 
-export const getAll = async (body: any) => {
+export const getIncomes = async (body: any) => {
   log.info("body:", body);
   const { limit, offset, filter } = body
   let data = await incomeRepo.findAll(limit, offset, filter);
   return data;
 };
 
-export const getById = async (id: number) => {
+export const getIncome = async (id: number) => {
   log.info("id:", id);
-  const data = await incomeRepo.findById(id);
+  const data = await incomeRepo.findOne({ id });
   return data;
 };
 
-export const update = async (body: any, id: number) => {
-  log.info("body:", body, "- id:", id);
-  const data = await incomeRepo.update(body, id);
+export const update = async (id: number, body: any) => {
+  log.info(`id:${id} - body:${body}`);
+  const data = await incomeRepo.update(id, body);
   return data;
 };
 
