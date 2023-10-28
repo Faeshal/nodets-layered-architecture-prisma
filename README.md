@@ -1,4 +1,4 @@
-🥇 Typescript Service Layer Architecture for Boilerplate REST API with **[Prisma](https://www.prisma.io/)** ORM
+🥇 Typescript Service Layer Architecture REST API Boilerplate with **[Prisma](https://www.prisma.io/)** ORM
 
 ![img](https://i.postimg.cc/tCV5fVJZ/node-rest-template.png)
 
