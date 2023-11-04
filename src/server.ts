@@ -84,7 +84,7 @@ log4js.configure({
 
 // * DB
 const dbConn = async () => {
-  await prisma.$connect().catch(err => {
+  await prisma.$connect().catch((err: any) => {
     log.error("DB ERROR", err)
     process.exit(1);
   })
